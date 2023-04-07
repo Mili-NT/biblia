@@ -13,10 +13,10 @@ License: Public domain
 #include <readline/history.h>
 #include <sys/ioctl.h>
 
-#include "kjv_config.h"
-#include "kjv_data.h"
-#include "kjv_ref.h"
-#include "kjv_render.h"
+#include "biblia_config.h"
+#include "biblia_data.h"
+#include "biblia_ref.h"
+#include "biblia_render.h"
 #include "strutil.h"
 
 const char *

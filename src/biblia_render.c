@@ -5,9 +5,9 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-#include "kjv_data.h"
-#include "kjv_match.h"
-#include "kjv_render.h"
+#include "biblia_data.h"
+#include "biblia_match.h"
+#include "biblia_render.h"
 
 #define ESC_BOLD "\033[1m"
 #define ESC_UNDERLINE "\033[4m"

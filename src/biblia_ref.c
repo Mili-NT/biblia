@@ -5,8 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "kjv_data.h"
-#include "kjv_ref.h"
+#include "biblia_data.h"
+#include "biblia_ref.h"
 
 kjv_ref *
 kjv_newref()

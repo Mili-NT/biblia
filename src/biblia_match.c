@@ -3,8 +3,8 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-#include "kjv_data.h"
-#include "kjv_match.h"
+#include "biblia_data.h"
+#include "biblia_match.h"
 #include "intset.h"
 
 static bool

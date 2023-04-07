@@ -1,7 +1,7 @@
 #pragma once
 
-#include "kjv_config.h"
-#include "kjv_ref.h"
+#include "biblia_config.h"
+#include "biblia_ref.h"
 
 typedef struct {
     int start;
