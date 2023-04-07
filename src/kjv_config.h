@@ -5,6 +5,7 @@
 typedef struct {
     bool highlighting;
     bool pretty;
+    bool plaintext;
 
     int maximum_line_length;
 

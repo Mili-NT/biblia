@@ -62,7 +62,7 @@ main(int argc, char *argv[])
     kjv_config config = {
         .highlighting = is_atty,
         .pretty = is_atty,
-
+        .plaintext = false,
         .maximum_line_length = 80,
 
         .context_before = 0,
@@ -73,7 +73,7 @@ main(int argc, char *argv[])
     bool list_books = false;
 
     opterr = 0;
-    for (int opt; (opt = getopt(argc, argv, "A:B:CeplWh")) != -1; ) {
+    for (int opt; (opt = getopt(argc, argv, "A:B:CeplWhP")) != -1; ) {
         char *endptr;
         switch (opt) {
         case 'A':
@@ -98,6 +98,9 @@ main(int argc, char *argv[])
             break;
         case 'p':
             config.pretty = true;
+            break;
+        case 'P':
+            config.plaintext = true;
             break;
         case 'l':
             list_books = true;
