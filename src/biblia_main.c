@@ -26,11 +26,11 @@ const char* usage = "usage: biblia [flags] [reference...]\n"
     "  -B num  show num verses of context before matching verses\n"
     "  -C      show matching verses in context of the chapter\n"
     "  -e      highlighting of chapters and verse numbers\n"
-    "          (default when output_text is a TTY)\n"
+    "          (default when output is a TTY)\n"
     "  -p      output_text to less with chapter grouping, spacing, indentation,\n"
     "          and line wrapping\n"
-    "          (default when output_text is a TTY)\n"
-    "  -P      Enables plaintext output_text.\n"
+    "          (default when output is a TTY)\n"
+    "  -P      Enables plaintext output.\n"
     "  -l      list books\n"
     "  -h      show help\n"
     "\n"
@@ -110,7 +110,14 @@ int main(int argc, char *argv[])
         case '?':
             fprintf(stderr, "Biblia: invalid flag -%c\n\n%s", optopt, usage);
             return 1;
+        default:
+            /* TODO: Change maybe */
+            fprintf(stderr, "");
         }
+    }
+
+    if (config.plaintext) {
+        config.pretty = false;
     }
 
     if (list_books) {

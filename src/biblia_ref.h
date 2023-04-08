@@ -22,7 +22,7 @@ typedef struct biblica_ref {
     regex_t search;
 } biblica_ref;
 
-biblica_ref* newref();
+biblica_ref *newref();
 
 void freeref(biblica_ref *ref);
 

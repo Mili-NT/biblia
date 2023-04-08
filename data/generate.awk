@@ -13,7 +13,7 @@ BEGIN {
     print ""
     print "verse verses[] = {"
 
-    book_count = 0
+    BookCount = 0
 }
 
 {
@@ -21,7 +21,7 @@ BEGIN {
     if (!($3 in book_names)) {
         book_names[$3] = $1
         book_abbrs[$3] = $2
-        book_count++
+        BookCount++
     }
 }
 
@@ -32,11 +32,11 @@ END {
     print ""
 
     print "book books[] = {"
-    for (i = 1; i <= book_count; i++) {
+    for (i = 1; i <= BookCount; i++) {
         printf("    {%d, \"%s\", \"%s\"},\n", i, book_names[i], book_abbrs[i])
     }
     print "};"
 
     print ""
-    printf("int books_length = %d;\n", book_count)
+    printf("int books_length = %d;\n", BookCount)
 }
