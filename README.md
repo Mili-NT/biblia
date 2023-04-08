@@ -17,7 +17,8 @@ ever successfully parse the beast that is the Orthodox Study Bible PDF, that wil
 5. Other minor features as I develop hyper-specific needs for them.
 ## Credits:
 - Original program: https://github.com/layeh/kjv
-- Septuagint & Greek New Testament TSV: https://github.com/LukeSmithxyz/grb
+- Septuagint & Greek New Testament TSV sourced from: https://github.com/LukeSmithxyz/grb
+- Clementine Vulgate TSV sourced from: https://github.com/LukeSmithxyz/vul
 ## Usage
 
     usage: biblica [flags] [reference...]

@@ -32,7 +32,7 @@ $(OBJ_DIR)/strutil.o: src/strutil.h src/strutil.c
 
 $(OBJ_DIR)/biblia_data.o: src/biblia_data.h data/kjv_data.c
 
-data/biblia_data.c: data/kjv.tsv data/generate.awk src/biblia_data.h
+data/biblia_data.c: data/grb.tsv data/generate.awk src/biblia_data.h
 	awk -f data/generate.awk $< > $@
 
 .PHONY: clean
