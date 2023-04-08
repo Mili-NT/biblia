@@ -12,7 +12,7 @@ OBJS = $(OBJ_DIR)/biblia_main.o \
 $(OBJ_DIR)/%.o: src/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-CFLAGS += -Wall -Isrc/
+CFLAGS += -Wall -g3 -Isrc/
 LDLIBS += -lreadline
 
 biblia: $(OBJS)
@@ -39,3 +39,4 @@ data/biblia_data.c: data/kjv.tsv data/generate.awk src/biblia_data.h
 clean:
 	rm -rf $(OBJS) biblia
 	rm -rf data/biblia_data*
+all: biblia

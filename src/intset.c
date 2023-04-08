@@ -9,8 +9,7 @@ typedef struct intset {
     size_t capacity;
 } intset;
 
-intset *
-intset_new()
+intset* intset_new()
 {
     intset *set = malloc(sizeof(intset));
     set->arr = malloc(sizeof(int) * 10);
@@ -19,8 +18,7 @@ intset_new()
     return set;
 }
 
-void
-intset_free(intset *set)
+void intset_free(intset *set)
 {
     if (set) {
         free(set->arr);
@@ -28,8 +26,7 @@ intset_free(intset *set)
     }
 }
 
-static int
-intset_cmp(const void *a, const void *b)
+static int intset_cmp(const void *a, const void *b)
 {
     int x = *(int *)a, y = *(int *)b;
     if (x < y) {
@@ -40,8 +37,7 @@ intset_cmp(const void *a, const void *b)
     return 0;
 }
 
-void
-intset_add(intset *set, int item)
+void intset_add(intset *set, int item)
 {
     if (intset_contains(set, item)) {
         return;
@@ -56,8 +52,7 @@ intset_add(intset *set, int item)
     qsort(set->arr, set->length, sizeof(int), intset_cmp);
 }
 
-bool
-intset_contains(intset *set, int item)
+bool intset_contains(intset *set, int item)
 {
     void *found = bsearch(&item, set->arr, set->length, sizeof(int), intset_cmp);
     return found != NULL;

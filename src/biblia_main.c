@@ -19,18 +19,18 @@ License: Public domain
 #include "biblia_render.h"
 #include "strutil.h"
 
-const char *
-usage = "usage: kjv [flags] [reference...]\n"
+const char* usage = "usage: biblia [flags] [reference...]\n"
     "\n"
     "Flags:\n"
     "  -A num  show num verses of context after matching verses\n"
     "  -B num  show num verses of context before matching verses\n"
     "  -C      show matching verses in context of the chapter\n"
     "  -e      highlighting of chapters and verse numbers\n"
-    "          (default when output is a TTY)\n"
-    "  -p      output to less with chapter grouping, spacing, indentation,\n"
+    "          (default when output_text is a TTY)\n"
+    "  -p      output_text to less with chapter grouping, spacing, indentation,\n"
     "          and line wrapping\n"
-    "          (default when output is a TTY)\n"
+    "          (default when output_text is a TTY)\n"
+    "  -P      Enables plaintext output_text.\n"
     "  -l      list books\n"
     "  -h      show help\n"
     "\n"
@@ -55,8 +55,7 @@ usage = "usage: kjv [flags] [reference...]\n"
     "    <Book>:<Chapter>/<Search>\n"
     "        All verses in a chapter of a book that match a pattern\n";
 
-int
-main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     bool is_atty = isatty(STDOUT_FILENO) == 1;
     biblia_config config = {
@@ -79,14 +78,14 @@ main(int argc, char *argv[])
         case 'A':
             config.context_after = strtol(optarg, &endptr, 10);
             if (endptr[0] != '\0') {
-                fprintf(stderr, "kjv: invalid flag value for -A\n\n%s", usage);
+                fprintf(stderr, "Biblia: invalid flag value for -A\n\n%s", usage);
                 return 1;
             }
             break;
         case 'B':
             config.context_before = strtol(optarg, &endptr, 10);
             if (endptr[0] != '\0') {
-                fprintf(stderr, "kjv: invalid flag value for -B\n\n%s", usage);
+                fprintf(stderr, "Biblia: invalid flag value for -B\n\n%s", usage);
                 return 1;
             }
             break;
@@ -109,7 +108,7 @@ main(int argc, char *argv[])
             printf("%s", usage);
             return 0;
         case '?':
-            fprintf(stderr, "kjv: invalid flag -%c\n\n%s", optopt, usage);
+            fprintf(stderr, "Biblia: invalid flag -%c\n\n%s", optopt, usage);
             return 1;
         }
     }
@@ -121,39 +120,40 @@ main(int argc, char *argv[])
         }
         return 0;
     }
-
+    /* Gets the size of the terminal window
+     * if the size of the window is greater than 0, it sets config.maximum_line_length to the size. */
     struct winsize ttysize;
     if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &ttysize) == 0 && ttysize.ws_col > 0) {
         config.maximum_line_length = ttysize.ws_col;
     }
 
     signal(SIGPIPE, SIG_IGN);
-
+    /* If no args are passed, enter interactive mode */
     if (argc == optind) {
         using_history();
         while (true) {
-            char *input = readline("kjv> ");
+            char *input = readline("Biblia> ");
             if (input == NULL) {
                 break;
             }
             add_history(input);
-            kjv_ref *ref = kjv_newref();
-            int success = kjv_parseref(ref, input);
+            biblica_ref *ref = newref();
+            int success = parseref(ref, input);
             free(input);
             if (success == 0) {
-                kjv_render(ref, &config);
+                render(ref, &config);
             }
-            kjv_freeref(ref);
+            freeref(ref);
         }
     } else {
         char *ref_str = str_join(argc-optind, &argv[optind]);
-        kjv_ref *ref = kjv_newref();
-        int success = kjv_parseref(ref, ref_str);
+        biblica_ref *ref = newref();
+        int success = parseref(ref, ref_str);
         free(ref_str);
         if (success == 0) {
-            kjv_render(ref, &config);
+            render(ref, &config);
         }
-        kjv_freeref(ref);
+        freeref(ref);
     }
 
     return 0;

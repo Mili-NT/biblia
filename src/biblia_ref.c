@@ -8,14 +8,12 @@
 #include "biblia_data.h"
 #include "biblia_ref.h"
 
-kjv_ref *
-kjv_newref()
+biblica_ref* newref()
 {
-    return calloc(1, sizeof(kjv_ref));
+    return calloc(1, sizeof(biblica_ref));
 }
 
-void
-kjv_freeref(kjv_ref *ref)
+void freeref(biblica_ref *ref)
 {
     if (ref) {
         free(ref->search_str);
@@ -25,8 +23,7 @@ kjv_freeref(kjv_ref *ref)
 }
 
 
-static bool
-bookequal(const char *a, const char *b, bool short_match)
+static bool bookequal(const char *a, const char *b, bool short_match)
 {
     for (size_t i = 0, j = 0; ; ) {
         if ((!a[i] && !b[j]) || (short_match && !b[j])) {
@@ -44,16 +41,14 @@ bookequal(const char *a, const char *b, bool short_match)
     }
 }
 
-static bool
-book_matches(const book *book, const char *s)
+static bool book_matches(const book *book, const char *s)
 {
     return bookequal(book->name, s, false) ||
         bookequal(book->abbr, s, false) ||
         bookequal(book->name, s, true);
 }
 
-static int
-book_fromname(const char *s)
+static int book_fromname(const char *s)
 {
     for (int i = 0; i < books_length; i++) {
         const book *book = &books[i];
@@ -64,8 +59,7 @@ book_fromname(const char *s)
     return 0;
 }
 
-static int
-kjv_scanbook(const char *s, int *n)
+static int scanbook(const char *s, int *n)
 {
     int i;
     int mode = 0;
@@ -84,8 +78,7 @@ kjv_scanbook(const char *s, int *n)
     return mode >= 1;
 }
 
-int
-kjv_parseref(kjv_ref *ref, const char *ref_str)
+int parseref(biblica_ref *ref, const char *ref_str)
 {
     // 1. <book>
     // 2. <book>:?<chapter>
@@ -111,7 +104,7 @@ kjv_parseref(kjv_ref *ref, const char *ref_str)
     regfree(&ref->search);
 
     int n = 0;
-    if (kjv_scanbook(ref_str, &n) == 1) {
+    if (scanbook(ref_str, &n) == 1) {
         // 1, 2, 3, 3a, 4, 5, 6, 8, 9
         char *bookname = strndup(ref_str, n);
         ref->book = book_fromname(bookname);
@@ -132,7 +125,7 @@ kjv_parseref(kjv_ref *ref, const char *ref_str)
         goto search;
     } else if (ref_str[0] == '\0') {
         // 1
-        ref->type = KJV_REF_EXACT;
+        ref->type = biblica_ref_EXACT;
         return 0;
     } else {
         return 1;
@@ -146,14 +139,14 @@ kjv_parseref(kjv_ref *ref, const char *ref_str)
         if (ref_str[n] != '\0') {
             return 1;
         }
-        ref->type = KJV_REF_RANGE;
+        ref->type = biblica_ref_RANGE;
         return 0;
     } else if (ref_str[0] == '/') {
         // 9
         goto search;
     } else if (ref_str[0] == '\0') {
         // 2
-        ref->type = KJV_REF_EXACT;
+        ref->type = biblica_ref_EXACT;
         return 0;
     } else {
         return 1;
@@ -164,7 +157,7 @@ kjv_parseref(kjv_ref *ref, const char *ref_str)
     if (ret == 1 && ref_str[n] == '\0') {
         // 5
         ref->verse_end = value;
-        ref->type = KJV_REF_RANGE;
+        ref->type = biblica_ref_RANGE;
         return 0;
     } else if (ret == 1) {
         // 6
@@ -172,7 +165,7 @@ kjv_parseref(kjv_ref *ref, const char *ref_str)
         ref_str = &ref_str[n];
     } else if (ref_str[0] == '\0') {
         // 3
-        ref->type = KJV_REF_EXACT;
+        ref->type = biblica_ref_EXACT;
         return 0;
     } else if (sscanf(ref_str, ", %u %n", &value, &n) == 1) {
         // 3a
@@ -190,7 +183,7 @@ kjv_parseref(kjv_ref *ref, const char *ref_str)
         if (ref_str[0] != '\0') {
             return 1;
         }
-        ref->type = KJV_REF_EXACT_SET;
+        ref->type = biblica_ref_EXACT_SET;
         return 0;
     } else {
         return 1;
@@ -198,14 +191,14 @@ kjv_parseref(kjv_ref *ref, const char *ref_str)
 
     if (sscanf(ref_str, ": %u %n", &ref->verse_end, &n) == 1 && ref_str[n] == '\0') {
         // 6
-        ref->type = KJV_REF_RANGE_EXT;
+        ref->type = biblica_ref_RANGE_EXT;
         return 0;
     } else {
         return 1;
     }
 
 search:
-    ref->type = KJV_REF_SEARCH;
+    ref->type = biblica_ref_SEARCH;
     if (regcomp(&ref->search, &ref_str[1], REG_EXTENDED|REG_ICASE|REG_NOSUB) != 0) {
         return 2;
     }

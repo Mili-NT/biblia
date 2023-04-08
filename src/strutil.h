@@ -2,5 +2,4 @@
 
 #include <stddef.h>
 
-char *
-str_join(size_t n, char *strs[]);
+char* str_join(size_t n, char *strs[]);

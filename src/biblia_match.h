@@ -6,13 +6,12 @@
 typedef struct {
     int start;
     int end;
-} kjv_range;
+} range;
 
 typedef struct {
     int current;
     int next_match;
-    kjv_range matches[2];
-} kjv_next_data;
+    range matches[2];
+} next_data;
 
-int
-kjv_next_verse(const kjv_ref *ref, const biblia_config *config, kjv_next_data *next);
+int next_verse(const biblica_ref *ref, const biblia_config *config, next_data *next);

@@ -4,13 +4,13 @@
 
 #include "intset.h"
 
-#define KJV_REF_SEARCH 1
-#define KJV_REF_EXACT 2
-#define KJV_REF_EXACT_SET 3
-#define KJV_REF_RANGE 4
-#define KJV_REF_RANGE_EXT 5
+#define biblica_ref_SEARCH 1
+#define biblica_ref_EXACT 2
+#define biblica_ref_EXACT_SET 3
+#define biblica_ref_RANGE 4
+#define biblica_ref_RANGE_EXT 5
 
-typedef struct kjv_ref {
+typedef struct biblica_ref {
     int type;
     unsigned int book;
     unsigned int chapter;
@@ -20,13 +20,10 @@ typedef struct kjv_ref {
     intset *verse_set;
     char *search_str;
     regex_t search;
-} kjv_ref;
+} biblica_ref;
 
-kjv_ref *
-kjv_newref();
+biblica_ref* newref();
 
-void
-kjv_freeref(kjv_ref *ref);
+void freeref(biblica_ref *ref);
 
-int
-kjv_parseref(kjv_ref *ref, const char *ref_str);
+int parseref(biblica_ref *ref, const char *ref_str);

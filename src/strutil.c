@@ -3,8 +3,7 @@
 
 #include "strutil.h"
 
-char *
-str_join(size_t n, char *strs[])
+char* str_join(size_t n, char *strs[])
 {
     size_t length = 0;
     for (size_t i = 0; i < n; i++) {
