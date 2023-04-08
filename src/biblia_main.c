@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
             return 1;
         default:
             /* TODO: Change maybe */
-            fprintf(stderr, "");
+            fprintf(stderr, "nargs");
         }
     }
 

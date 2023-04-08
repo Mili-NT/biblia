@@ -1,12 +1,26 @@
-<a href="https://archive.org/details/new-world-order-bible-versions-full-movie" title="Why the King James Bible?"><img src="https://i.imgur.com/A9piMKc.png" width="250" align="right"></a>
+# Biblica
 
-# kjv [![AUR](https://img.shields.io/badge/AUR-kjv--git-blue.svg)](https://aur.archlinux.org/packages/kjv-git/)
+Biblica is a CLI program written in C for biblical study. Inspired by and forked from
+[kjv](https://github.com/layeh/kjv), I wanted to ~~bloat~~ extend the program to include
+several translations and a few new features.
 
-Read the Word of God from your terminal
-
+Namely:
+1. Compare verses between translations (in the same window no less).
+The kjv program is extremely well-designed and works with basically any text with verses,
+so I wanted to include as many translations as is feasible into one program instead of
+making a separate script for each.
+2. Add plaintext output for easy piping into other processes or files
+3. Potentially allow for historical or theological commentary to be attached to sections/verses.
+This is going to a bit tricky due to the relatively unstructured format of commentary. If I could
+ever successfully parse the beast that is the Orthodox Study Bible PDF, that will be my first source.
+4. A nice TUI if I can design one
+5. Other minor features as I develop hyper-specific needs for them.
+## Credits:
+- Original program: https://github.com/layeh/kjv
+- Septuagint & Greek New Testament TSV: https://github.com/LukeSmithxyz/grb
 ## Usage
 
-    usage: kjv [flags] [reference...]
+    usage: biblica [flags] [reference...]
 
     Flags:
       -A num  show num verses of context after matching verses
@@ -17,6 +31,7 @@ Read the Word of God from your terminal
       -p      output_text to less with chapter grouping, spacing, indentation,
               and line wrapping
               (default when output_text is a TTY)
+      -P      Output to plain text
       -l      list books
       -h      show help
 
@@ -43,10 +58,10 @@ Read the Word of God from your terminal
 
 ## Build
 
-kjv can be built by cloning the repository and then running make:
+Biblica can be built by cloning the repository and then running make:
 
-    git clone https://github.com/layeh/kjv.git
-    cd kjv
+    git clone https://github.com/Mili-NT/biblia.git
+    cd biblica
     make
 
 ## License
