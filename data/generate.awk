@@ -11,7 +11,7 @@ BEGIN {
     print ""
     print "#include \"biblia_data.h\""
     print ""
-    print "kjv_verse kjv_verses[] = {"
+    print "verse verses[] = {"
 
     book_count = 0
 }
@@ -28,15 +28,15 @@ BEGIN {
 END {
     print "};"
     print ""
-    printf("int kjv_verses_length = %d;\n", NR)
+    printf("int verses_length = %d;\n", NR)
     print ""
 
-    print "kjv_book kjv_books[] = {"
+    print "book books[] = {"
     for (i = 1; i <= book_count; i++) {
         printf("    {%d, \"%s\", \"%s\"},\n", i, book_names[i], book_abbrs[i])
     }
     print "};"
 
     print ""
-    printf("int kjv_books_length = %d;\n", book_count)
+    printf("int books_length = %d;\n", book_count)
 }

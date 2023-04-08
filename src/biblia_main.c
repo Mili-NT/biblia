@@ -59,7 +59,7 @@ int
 main(int argc, char *argv[])
 {
     bool is_atty = isatty(STDOUT_FILENO) == 1;
-    kjv_config config = {
+    biblia_config config = {
         .highlighting = is_atty,
         .pretty = is_atty,
         .plaintext = false,
@@ -115,8 +115,8 @@ main(int argc, char *argv[])
     }
 
     if (list_books) {
-        for (int i = 0; i < kjv_books_length; i++) {
-            kjv_book *book = &kjv_books[i];
+        for (int i = 0; i < books_length; i++) {
+            book *book = &books[i];
             printf("%s (%s)\n", book->name, book->abbr);
         }
         return 0;

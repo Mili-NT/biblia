@@ -26,7 +26,7 @@ kjv_freeref(kjv_ref *ref)
 
 
 static bool
-kjv_bookequal(const char *a, const char *b, bool short_match)
+bookequal(const char *a, const char *b, bool short_match)
 {
     for (size_t i = 0, j = 0; ; ) {
         if ((!a[i] && !b[j]) || (short_match && !b[j])) {
@@ -45,19 +45,19 @@ kjv_bookequal(const char *a, const char *b, bool short_match)
 }
 
 static bool
-kjv_book_matches(const kjv_book *book, const char *s)
+book_matches(const book *book, const char *s)
 {
-    return kjv_bookequal(book->name, s, false) ||
-        kjv_bookequal(book->abbr, s, false) ||
-        kjv_bookequal(book->name, s, true);
+    return bookequal(book->name, s, false) ||
+        bookequal(book->abbr, s, false) ||
+        bookequal(book->name, s, true);
 }
 
 static int
-kjv_book_fromname(const char *s)
+book_fromname(const char *s)
 {
-    for (int i = 0; i < kjv_books_length; i++) {
-        const kjv_book *book = &kjv_books[i];
-        if (kjv_book_matches(book, s)) {
+    for (int i = 0; i < books_length; i++) {
+        const book *book = &books[i];
+        if (book_matches(book, s)) {
             return book->number;
         }
     }
@@ -114,7 +114,7 @@ kjv_parseref(kjv_ref *ref, const char *ref_str)
     if (kjv_scanbook(ref_str, &n) == 1) {
         // 1, 2, 3, 3a, 4, 5, 6, 8, 9
         char *bookname = strndup(ref_str, n);
-        ref->book = kjv_book_fromname(bookname);
+        ref->book = book_fromname(bookname);
         free(bookname);
         ref_str = &ref_str[n];
     } else if (ref_str[0] == '/') {

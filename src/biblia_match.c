@@ -8,7 +8,7 @@
 #include "intset.h"
 
 static bool
-kjv_verse_matches(const kjv_ref *ref, const kjv_verse *verse)
+verse_matches(const kjv_ref *ref, const verse *verse)
 {
     switch (ref->type) {
         case KJV_REF_SEARCH:
@@ -56,15 +56,15 @@ kjv_chapter_bounds(int i, int direction, int maximum_steps)
     assert(direction == KJV_DIRECTION_BEFORE || direction == KJV_DIRECTION_AFTER);
 
     int steps = 0;
-    for ( ; 0 <= i && i < kjv_verses_length; i += direction) {
+    for ( ; 0 <= i && i < verses_length; i += direction) {
         bool step_limit = (maximum_steps != -1 && steps >= maximum_steps) ||
             (direction == KJV_DIRECTION_BEFORE && i == 0) ||
-            (direction == KJV_DIRECTION_AFTER && i + 1 == kjv_verses_length);
+            (direction == KJV_DIRECTION_AFTER && i + 1 == verses_length);
         if (step_limit) {
             break;
         }
 
-        const kjv_verse *current = &kjv_verses[i], *next = &kjv_verses[i + direction];
+        const verse *current = &verses[i], *next = &verses[i + direction];
         if (current->book != next->book || current->chapter != next->chapter) {
             break;
         }
@@ -76,9 +76,9 @@ kjv_chapter_bounds(int i, int direction, int maximum_steps)
 static int
 kjv_next_match(const kjv_ref *ref, int i)
 {
-    for ( ; i < kjv_verses_length; i++) {
-        const kjv_verse *verse = &kjv_verses[i];
-        if (kjv_verse_matches(ref, verse)) {
+    for ( ; i < verses_length; i++) {
+        const verse *verse = &verses[i];
+        if (verse_matches(ref, verse)) {
             return i;
         }
     }
@@ -97,9 +97,9 @@ kjv_next_addrange(kjv_next_data *next, kjv_range range) {
 }
 
 int
-kjv_next_verse(const kjv_ref *ref, const kjv_config *config, kjv_next_data *next)
+kjv_next_verse(const kjv_ref *ref, const biblia_config *config, kjv_next_data *next)
 {
-    if (next->current >= kjv_verses_length) {
+    if (next->current >= verses_length) {
         return -1;
     }
 
@@ -108,7 +108,7 @@ kjv_next_verse(const kjv_ref *ref, const kjv_config *config, kjv_next_data *next
         next->matches[1] = (kjv_range){-1, -1};
     }
 
-    if ((next->next_match == -1 || next->next_match < next->current) && next->next_match < kjv_verses_length) {
+    if ((next->next_match == -1 || next->next_match < next->current) && next->next_match < verses_length) {
         int next_match = kjv_next_match(ref, next->current);
         if (next_match >= 0) {
             next->next_match = next_match;
@@ -118,7 +118,7 @@ kjv_next_verse(const kjv_ref *ref, const kjv_config *config, kjv_next_data *next
             };
             kjv_next_addrange(next, bounds);
         } else {
-            next_match = kjv_verses_length;
+            next_match = verses_length;
         }
     }
 

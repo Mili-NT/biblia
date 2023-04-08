@@ -14,7 +14,7 @@
 #define ESC_RESET "\033[m"
 
 static void
-kjv_output_verse(const kjv_verse *verse, FILE *f, const kjv_config *config)
+kjv_output_verse(const verse *verse, FILE *f, const biblia_config *config)
 {
     fprintf(
         f,
@@ -46,7 +46,7 @@ kjv_output_verse(const kjv_verse *verse, FILE *f, const kjv_config *config)
 }
 
 static bool
-kjv_output(const kjv_ref *ref, FILE *f, const kjv_config *config)
+kjv_output(const kjv_ref *ref, FILE *f, const biblia_config *config)
 {
     kjv_next_data next = {
         .current = 0,
@@ -57,10 +57,10 @@ kjv_output(const kjv_ref *ref, FILE *f, const kjv_config *config)
         },
     };
 
-    kjv_verse *last_printed = NULL;
+    verse *last_printed = NULL;
     for (int verse_id; (verse_id = kjv_next_verse(ref, config, &next)) != -1; ) {
-        kjv_verse *verse = &kjv_verses[verse_id];
-        kjv_book *book = &kjv_books[verse->book - 1];
+        verse *verse = &verses[verse_id];
+        book *book = &books[verse->book - 1];
 
         if (config->pretty) {
             if (last_printed == NULL || verse->book != last_printed->book) {
@@ -94,7 +94,7 @@ kjv_output(const kjv_ref *ref, FILE *f, const kjv_config *config)
 }
 
 static int
-kjv_render_pretty(const kjv_ref *ref, const kjv_config *config)
+kjv_render_pretty(const kjv_ref *ref, const biblia_config *config)
 {
     int fds[2];
     if (pipe(fds) == -1) {
@@ -137,7 +137,7 @@ kjv_render_pretty(const kjv_ref *ref, const kjv_config *config)
 }
 
 int
-kjv_render(const kjv_ref *ref, const kjv_config *config)
+kjv_render(const kjv_ref *ref, const biblia_config *config)
 {
     if (config->pretty) {
         return kjv_render_pretty(ref, config);

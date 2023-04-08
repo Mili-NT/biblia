@@ -4,4 +4,4 @@
 #include "biblia_ref.h"
 
 int
-kjv_render(const kjv_ref *ref, const kjv_config *config);
+kjv_render(const kjv_ref *ref, const biblia_config *config);

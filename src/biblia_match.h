@@ -15,4 +15,4 @@ typedef struct {
 } kjv_next_data;
 
 int
-kjv_next_verse(const kjv_ref *ref, const kjv_config *config, kjv_next_data *next);
+kjv_next_verse(const kjv_ref *ref, const biblia_config *config, kjv_next_data *next);
