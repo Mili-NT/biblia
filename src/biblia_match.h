@@ -14,4 +14,4 @@ typedef struct {
     range matches[2];
 } next_data;
 
-int next_verse(const biblica_ref *ref, const biblia_config *config, next_data *next);
+int next_verse(const biblia_ref *ref, const biblia_config *config, next_data *next);

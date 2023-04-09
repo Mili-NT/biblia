@@ -7,32 +7,32 @@
 #include "biblia_match.h"
 #include "intset.h"
 
-static bool verse_matches(const biblica_ref *ref, const verse *verse)
+static bool verse_matches(const biblia_ref *ref, const verse *verse)
 {
     switch (ref->type) {
-        case biblica_ref_SEARCH:
+        case biblia_ref_SEARCH:
             return (ref->book == 0 || ref->book == verse->book) &&
                 (ref->chapter == 0 || verse->chapter == ref->chapter) &&
                 regexec(&ref->search, verse->text, 0, NULL, 0) == 0;
 
-        case biblica_ref_EXACT:
+        case biblia_ref_EXACT:
             return ref->book == verse->book &&
                 (ref->chapter == 0 || ref->chapter == verse->chapter) &&
                 (ref->verse == 0 || ref->verse == verse->verse);
 
-        case biblica_ref_EXACT_SET:
+        case biblia_ref_EXACT_SET:
             return ref->book == verse->book &&
                 (ref->chapter == 0 || verse->chapter == ref->chapter) &&
                 intset_contains(ref->verse_set, verse->verse);
 
-        case biblica_ref_RANGE:
+        case biblia_ref_RANGE:
             return ref->book == verse->book &&
                 ((ref->chapter_end == 0 && ref->chapter == verse->chapter) ||
                     (verse->chapter >= ref->chapter && verse->chapter <= ref->chapter_end)) &&
                 (ref->verse == 0 || verse->verse >= ref->verse) &&
                 (ref->verse_end == 0 || verse->verse <= ref->verse_end);
 
-        case biblica_ref_RANGE_EXT:
+        case biblia_ref_RANGE_EXT:
             return ref->book == verse->book &&
                 (
                     (verse->chapter == ref->chapter && verse->verse >= ref->verse && ref->chapter != ref->chapter_end) ||
@@ -71,7 +71,7 @@ static int chapter_bounds(int i, int direction, int maximum_steps)
     return i;
 }
 
-static int get_next_match(const biblica_ref *ref, int i)
+static int get_next_match(const biblia_ref *ref, int i)
 {
     for ( ; i < verses_length; i++) {
         const verse *verse = &verses[i];
@@ -92,7 +92,7 @@ static void next_addrange(next_data *next, range range) {
     }
 }
 
-int next_verse(const biblica_ref *ref, const biblia_config *config, next_data *next)
+int next_verse(const biblia_ref *ref, const biblia_config *config, next_data *next)
 {
     if (next->current >= verses_length) {
         return -1;

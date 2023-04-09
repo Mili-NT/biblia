@@ -44,7 +44,7 @@ static void output_verse(const verse *verse, FILE *f, const biblia_config *confi
     fprintf(f, "\n");
 }
 
-static bool output_text(const biblica_ref *ref, FILE *f, const biblia_config *config)
+static bool output_text(const biblia_ref *ref, FILE *f, const biblia_config *config)
 {
     next_data next = {
         .current = 0,
@@ -91,7 +91,7 @@ static bool output_text(const biblica_ref *ref, FILE *f, const biblia_config *co
     return last_printed != NULL;
 }
 
-static int render_pretty(const biblica_ref *ref, const biblia_config *config)
+static int render_pretty(const biblia_ref *ref, const biblia_config *config)
 {
     int fds[2];
     if (pipe(fds) == -1) {
@@ -133,7 +133,7 @@ static int render_pretty(const biblica_ref *ref, const biblia_config *config)
     return 0;
 }
 
-int render(const biblica_ref *ref, const biblia_config *config)
+int render(const biblia_ref *ref, const biblia_config *config)
 {
     if (config->pretty) {
         return render_pretty(ref, config);

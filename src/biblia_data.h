@@ -1,4 +1,10 @@
-#pragma once
+
+typedef struct {
+    int book;
+    int chapter;
+    int verse;
+    char *text;
+} verse;
 
 typedef struct {
     int number;
@@ -7,11 +13,11 @@ typedef struct {
 } book;
 
 typedef struct {
-    int book;
-    int chapter;
-    int verse;
-    char *text;
-} verse;
+    char *name;
+    char *abbr;
+    book *books;
+    int num_books;
+} translation;
 
 extern verse verses[];
 

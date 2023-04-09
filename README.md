@@ -1,6 +1,6 @@
-# Biblica
+# biblia
 
-Biblica is a CLI program written in C for biblical study. Inspired by and forked from
+biblia is a CLI program written in C for biblial study. Inspired by and forked from
 [kjv](https://github.com/layeh/kjv), I wanted to ~~bloat~~ extend the program to include
 several translations and a few new features.
 
@@ -21,7 +21,7 @@ ever successfully parse the beast that is the Orthodox Study Bible PDF, that wil
 - Clementine Vulgate TSV sourced from: https://github.com/LukeSmithxyz/vul
 ## Usage
 
-    usage: biblica [flags] [reference...]
+    usage: biblia [flags] [reference...]
 
     Flags:
       -A num  show num verses of context after matching verses
@@ -59,10 +59,10 @@ ever successfully parse the beast that is the Orthodox Study Bible PDF, that wil
 
 ## Build
 
-Biblica can be built by cloning the repository and then running make:
+biblia can be built by cloning the repository and then running make:
 
     git clone https://github.com/Mili-NT/biblia.git
-    cd biblica
+    cd biblia
     make
 
 ## License

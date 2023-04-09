@@ -144,7 +144,7 @@ int main(int argc, char *argv[])
                 break;
             }
             add_history(input);
-            biblica_ref *ref = newref();
+            biblia_ref *ref = newref();
             int success = parseref(ref, input);
             free(input);
             if (success == 0) {
@@ -154,7 +154,7 @@ int main(int argc, char *argv[])
         }
     } else {
         char *ref_str = str_join(argc-optind, &argv[optind]);
-        biblica_ref *ref = newref();
+        biblia_ref *ref = newref();
         int success = parseref(ref, ref_str);
         free(ref_str);
         if (success == 0) {
@@ -162,6 +162,5 @@ int main(int argc, char *argv[])
         }
         freeref(ref);
     }
-
     return 0;
 }

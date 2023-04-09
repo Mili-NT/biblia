@@ -4,26 +4,29 @@
 
 #include "intset.h"
 
-#define biblica_ref_SEARCH 1
-#define biblica_ref_EXACT 2
-#define biblica_ref_EXACT_SET 3
-#define biblica_ref_RANGE 4
-#define biblica_ref_RANGE_EXT 5
+#define biblia_ref_SEARCH 1
+#define biblia_ref_EXACT 2
+#define biblia_ref_EXACT_SET 3
+#define biblia_ref_RANGE 4
+#define biblia_ref_RANGE_EXT 5
+#define MAX_TRANSLATIONS 4
 
-typedef struct biblica_ref {
+typedef struct biblia_ref {
     int type;
     unsigned int book;
     unsigned int chapter;
     unsigned int chapter_end;
     unsigned int verse;
     unsigned int verse_end;
+    char translations[MAX_TRANSLATIONS][6];
+    unsigned int translation_count;
     intset *verse_set;
     char *search_str;
     regex_t search;
-} biblica_ref;
+} biblia_ref;
 
-biblica_ref *newref();
+biblia_ref *newref();
 
-void freeref(biblica_ref *ref);
+void freeref(biblia_ref *ref);
 
-int parseref(biblica_ref *ref, const char *ref_str);
+int parseref(biblia_ref *ref, const char *ref_str);

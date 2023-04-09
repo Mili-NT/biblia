@@ -12,8 +12,8 @@
 
 ## Usages:
 To compare 1 corinthians 13:7 in X translations:
-- biblica 1 Corinthians 13:7 {kjv, vul}
-- biblica 1cor 13:7 {kjv, vul, osb}
+- biblia 1 Corinthians 13:7 {kjv, vul}
+- biblia 1cor 13:7 {kjv, vul, osb}
 
 To list books from X translations:
-- biblica -l {kjv, vul, osb, nev}
+- biblia -l {kjv, vul, osb, nev}

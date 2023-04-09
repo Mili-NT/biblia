@@ -8,12 +8,14 @@
 #include "biblia_data.h"
 #include "biblia_ref.h"
 
-biblica_ref* newref()
+
+
+biblia_ref* newref()
 {
-    return calloc(1, sizeof(biblica_ref));
+    return calloc(1, sizeof(biblia_ref));
 }
 
-void freeref(biblica_ref *ref)
+void freeref(biblia_ref *ref)
 {
     if (ref) {
         free(ref->search_str);
@@ -78,7 +80,7 @@ static int scanbook(const char *s, int *n)
     return mode >= 1;
 }
 
-int parseref(biblica_ref *ref, const char *ref_str)
+int parseref(biblia_ref *ref, const char *ref_str)
 {
     // 1. <book>
     // 2. <book>:?<chapter>
@@ -97,6 +99,10 @@ int parseref(biblica_ref *ref, const char *ref_str)
     ref->chapter_end = 0;
     ref->verse = 0;
     ref->verse_end = 0;
+    for (int i = 0; i < MAX_TRANSLATIONS; i++) {
+        strcpy(ref->translations[i], "");
+    }
+    ref->translation_count = 0;
     intset_free(ref->verse_set);
     ref->verse_set = NULL;
     free(ref->search_str);
@@ -104,52 +110,76 @@ int parseref(biblica_ref *ref, const char *ref_str)
     regfree(&ref->search);
 
     int n = 0;
+    // ref_str = 1cor 7:3 kjv,vul,grb
+    /* Book name parsing */
     if (scanbook(ref_str, &n) == 1) {
         // 1, 2, 3, 3a, 4, 5, 6, 8, 9
         char *bookname = strndup(ref_str, n);
         ref->book = book_fromname(bookname);
         free(bookname);
+        /* Removes the found chapter from ref_str */
         ref_str = &ref_str[n];
+        // ref_str = 7:3 kjv,vul,grb
+    /* If the first character is the search operator, initiate search */
     } else if (ref_str[0] == '/') {
         // 7
         goto search;
     } else {
         return 1;
     }
-
+    /* This performs the same parsing but on the chapter number */
     if (sscanf(ref_str, ": %u %n", &ref->chapter, &n) == 1 || sscanf(ref_str, "%u %n", &ref->chapter, &n) == 1) {
         // 2, 3, 3a, 4, 5, 6, 9
+        /* Removed from ref_str again */
         ref_str = &ref_str[n];
+        // ref_str = :3 kjv,vul,grb
     } else if (ref_str[0] == '/') {
         // 8
         goto search;
     } else if (ref_str[0] == '\0') {
         // 1
-        ref->type = biblica_ref_EXACT;
+        ref->type = biblia_ref_EXACT;
         return 0;
     } else {
         return 1;
     }
-
+    /* Finally parses the verse number */
     if (sscanf(ref_str, ": %u %n", &ref->verse, &n) == 1) {
         // 3, 3a, 5, 6
+        /* Ref_str reduced again */
         ref_str = &ref_str[n];
+        // ref_str = kjv,vul,grb
     } else if (sscanf(ref_str, "- %u %n", &ref->chapter_end, &n) == 1) {
         // 4
         if (ref_str[n] != '\0') {
             return 1;
         }
-        ref->type = biblica_ref_RANGE;
+        ref->type = biblia_ref_RANGE;
         return 0;
     } else if (ref_str[0] == '/') {
         // 9
         goto search;
     } else if (ref_str[0] == '\0') {
         // 2
-        ref->type = biblica_ref_EXACT;
+        ref->type = biblia_ref_EXACT;
         return 0;
     } else {
         return 1;
+    }
+    /* Check if translations were provided */
+    if (strlen(ref_str) != 0) {
+        char *token;
+        int i = 0;
+        char* ref_str_cpy = strdup(ref_str);
+        token = strtok(ref_str_cpy, ",");
+        /* Parses through the comma separated translation string and stores it in the translations array */
+        while (token != NULL && i < MAX_TRANSLATIONS) {
+            strcpy(ref->translations[i], token);
+            ref->translation_count++;
+            i++;
+            token = strtok(NULL, ",");
+        }
+        free(ref_str_cpy);
     }
 
     unsigned int value;
@@ -157,7 +187,7 @@ int parseref(biblica_ref *ref, const char *ref_str)
     if (ret == 1 && ref_str[n] == '\0') {
         // 5
         ref->verse_end = value;
-        ref->type = biblica_ref_RANGE;
+        ref->type = biblia_ref_RANGE;
         return 0;
     } else if (ret == 1) {
         // 6
@@ -165,7 +195,7 @@ int parseref(biblica_ref *ref, const char *ref_str)
         ref_str = &ref_str[n];
     } else if (ref_str[0] == '\0') {
         // 3
-        ref->type = biblica_ref_EXACT;
+        ref->type = biblia_ref_EXACT;
         return 0;
     } else if (sscanf(ref_str, ", %u %n", &value, &n) == 1) {
         // 3a
@@ -183,7 +213,7 @@ int parseref(biblica_ref *ref, const char *ref_str)
         if (ref_str[0] != '\0') {
             return 1;
         }
-        ref->type = biblica_ref_EXACT_SET;
+        ref->type = biblia_ref_EXACT_SET;
         return 0;
     } else {
         return 1;
@@ -191,14 +221,14 @@ int parseref(biblica_ref *ref, const char *ref_str)
 
     if (sscanf(ref_str, ": %u %n", &ref->verse_end, &n) == 1 && ref_str[n] == '\0') {
         // 6
-        ref->type = biblica_ref_RANGE_EXT;
+        ref->type = biblia_ref_RANGE_EXT;
         return 0;
     } else {
         return 1;
     }
 
 search:
-    ref->type = biblica_ref_SEARCH;
+    ref->type = biblia_ref_SEARCH;
     if (regcomp(&ref->search, &ref_str[1], REG_EXTENDED|REG_ICASE|REG_NOSUB) != 0) {
         return 2;
     }
