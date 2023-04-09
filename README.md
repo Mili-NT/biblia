@@ -1,6 +1,6 @@
 # biblia
 
-biblia is a CLI program written in C for biblial study. Inspired by and forked from
+biblia is a CLI program written in C for biblical study. Inspired by and forked from
 [kjv](https://github.com/layeh/kjv), I wanted to ~~bloat~~ extend the program to include
 several translations and a few new features.
 
